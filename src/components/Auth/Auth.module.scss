@@ -1,0 +1,27 @@
+$primary-color: #324855;
+$secondary-color: #5c8c8c;
+$tertiary-color: #90c0cc;
+
+.textRight {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  user-select: none;
+  font-size: 1.6em;
+  font-weight: 600;
+  color: $primary-color;
+  background-color: $secondary-color;
+  transition: 0.2s ease;
+}
+
+.textLeft {
+  position: absolute;
+  top: 20px;
+  left: 40px;
+  user-select: none;
+  font-size: 1.6em;
+  font-weight: 600;
+  color: $primary-color;
+  background-color: $secondary-color;
+  transition: 0.2s ease;
+}

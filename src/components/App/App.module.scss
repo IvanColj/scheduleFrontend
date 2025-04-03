@@ -1,0 +1,90 @@
+$primary-color: #324855;
+$secondary-color: #5c8c8c;
+$tertiary-color: #90c0cc;
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.container {
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 230px;
+  line-height: 80px;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  margin-bottom: 40px;
+}
+
+.in {
+  outline: none;
+  font-size: 2.2em;
+  padding: 0 30px;
+  line-height: 80px;
+  border-radius: 10px;
+  border: 4px solid $primary-color;
+  background-color: transparent;
+  transition: 0.1s ease;
+  z-index: 1111;
+}
+
+.labelLine {
+  user-select: none;
+  position: absolute;
+  font-size: 1.6em;
+  font-weight: 600;
+  color: #324855;
+  padding: 0 25px;
+  margin: 0 20px;
+  background-color: $secondary-color;
+  transition: 0.2s ease;
+}
+input:focus,
+input:valid {
+  color: $primary-color;
+  border: 4px solid $tertiary-color;
+}
+
+input:focus + .labelLine,
+input:valid + .labelLine {
+  color: $primary-color;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 12px;
+  transform: translate(-15px, -16px) scale(0.88);
+  z-index: 1111;
+}
+
+.btn {
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  padding: 15px 75px;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: 1px;
+  background-color: $primary-color;
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+  transition: transform .1s;
+}
+.btn:hover {
+  transform: scale(1.03);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+
