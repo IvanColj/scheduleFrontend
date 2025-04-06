@@ -1,10 +1,6 @@
 // import styles from './Users.module.scss'
-import {useQuery} from "@tanstack/react-query";
-
-const getData = async () => {
-    const response = await fetch('http://localhost:8080/api/staff/all')
-    return response.json();
-}
+import {useQuery} from "@tanstack/react-query"
+import {getLogin} from "../Fetch/Staff.tsx"
 
 type User = {
     id: number;
@@ -15,7 +11,7 @@ function Users() {
 
     const {data, error, isSuccess} = useQuery({
         queryKey: ['allUsers'],
-        queryFn: getData
+        queryFn: getLogin
     })
 
     console.log(error, isSuccess)

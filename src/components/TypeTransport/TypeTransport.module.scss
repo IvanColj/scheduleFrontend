@@ -1,0 +1,60 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+
+$primary-color: #324855;
+$secondary-color: #5c8c8c;
+$tertiary-color: #90c0cc;
+
+.textLeft {
+  position: absolute;
+  top: 20px;
+  left: 40px;
+  user-select: none;
+  font-size: 1.6em;
+  font-weight: 600;
+  color: $primary-color;
+  background-color: $secondary-color;
+  transition: 0.2s ease;
+}
+
+.type {
+  color: $primary-color;
+  background-color: $tertiary-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  margin-right: 20px;
+  margin-bottom: 200px;
+  padding: 7px 50px 7px 50px;
+}
+
+.type:hover {
+  transform: scale(1.03);
+}
+.type:active {
+  transform: scale(0.97);
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+}
+
+.boardNumber {
+  color: $primary-color;
+  background-color: $tertiary-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 180px;
+  height: 180px;
+  border-radius: 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 48px;
+  margin: 20px;
+}

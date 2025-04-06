@@ -80,6 +80,7 @@ input:valid + .labelLine {
   text-align: center;
   text-transform: uppercase;
   transition: transform .1s;
+  user-select: none;
 }
 .btn:hover {
   transform: scale(1.03);
