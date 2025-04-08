@@ -1,7 +1,13 @@
 import styles from './App.module.scss';
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
+import AdminMain from "../AdminMain/AdminMain.tsx";
 
-function App() {
+type TypeAdmin = {
+    isAdmin: boolean;
+    setIsAdmin: (value: boolean) => void;
+};
+
+function App({isAdmin, setIsAdmin}:TypeAdmin) {
 
     const [auth, setAuth] = useState({
         login: '',
@@ -12,8 +18,19 @@ function App() {
     const passwordRef = useRef<HTMLInputElement>(null);
     const submitButtonRef = useRef<HTMLButtonElement>(null);
 
+    useEffect(() => {
+        if (loginRef.current) {
+            loginRef.current.focus();
+        }
+    }, []);
+
     const toBase64 = (str: string) => {
         return window.btoa(str);
+    };
+
+    const saveAuthData = (login: string, password: string) => {
+        localStorage.setItem('login', login);
+        localStorage.setItem('password', password);
     };
 
     const fetchStaffs = (e?: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLInputElement>) => {
@@ -35,14 +52,22 @@ function App() {
                         console.clear();
                         alert('У вас недостаточно прав');
                         return;
-                    } else {
+                    }
+                    else if (res.status === 401) {
+                        console.clear();
+                        alert('Не правильный пароль или логин');
+                    }
+                    else {
                         throw new Error(`Ошибка авторизации: ${res.statusText}`);
                     }
                 }
+                else {
+                    saveAuthData(login, password);
+                }
                 return res.json();
             })
-            .then((json) => {
-                console.log(json);
+            .then(() => {
+                setIsAdmin(true);
             })
             .catch(() => {
             });
@@ -70,42 +95,46 @@ function App() {
 
     return (
         <>
-
-            <div className={styles.container}>
-                <div className={styles.card}>
-                    <div className={styles.input}>
-                        <input
-                            type="text"
-                            className={styles.in}
-                            name="login"
-                            ref={loginRef}
-                            value={auth.login}
-                            onKeyDown={handleKeyPress}
-                            onChange={handleInputChange}
-                        />
-                        <div className={styles.labelLine}>Логин</div>
-                    </div>
-                    <div className={styles.input}>
-                        <input
-                            type="password"
-                            className={styles.in}
-                            name="password"
-                            ref={passwordRef}
-                            value={auth.password}
-                            onKeyDown={handleKeyPress}
-                            onChange={handleInputChange}
-                        />
-                        <div className={styles.labelLine}>Пароль</div>
-                    </div>
-                    <button
-                        className={styles.btn}
-                        ref={submitButtonRef}
-                        onClick={fetchStaffs}
-                    >
-                        Войти
-                    </button>
-                </div>
-            </div>
+            {
+                isAdmin ? (<AdminMain/>) :
+                    (
+                        <div className={styles.container}>
+                            <div className={styles.card}>
+                                <div className={styles.input}>
+                                    <input
+                                        type="text"
+                                        className={styles.in}
+                                        name="login"
+                                        ref={loginRef}
+                                        value={auth.login}
+                                        onKeyDown={handleKeyPress}
+                                        onChange={handleInputChange}
+                                    />
+                                    <div className={styles.labelLine}>Логин</div>
+                                </div>
+                                <div className={styles.input}>
+                                    <input
+                                        type="password"
+                                        className={styles.in}
+                                        name="password"
+                                        ref={passwordRef}
+                                        value={auth.password}
+                                        onKeyDown={handleKeyPress}
+                                        onChange={handleInputChange}
+                                    />
+                                    <div className={styles.labelLine}>Пароль</div>
+                                </div>
+                                <button
+                                    className={styles.btn}
+                                    ref={submitButtonRef}
+                                    onClick={fetchStaffs}
+                                >
+                                    Войти
+                                </button>
+                            </div>
+                        </div>
+                    )
+            }
         </>
     );
 }

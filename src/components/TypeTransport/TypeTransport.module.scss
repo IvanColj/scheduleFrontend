@@ -40,6 +40,11 @@ $tertiary-color: #90c0cc;
   transform: scale(0.97);
 }
 
+.selected {
+  background-color: $primary-color;
+  color: $tertiary-color;
+}
+
 .content {
   display: flex;
   flex-direction: row;

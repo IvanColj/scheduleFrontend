@@ -24,6 +24,10 @@ function Table({ transport }: { transport: string }) {
         ? data as IncomingData
         : {};
 
+    if (Object.keys(schedules).length === 0) {
+        return <div className={styles.text}>Расписания для данного транспорта пока отсутствуют</div>;
+    }
+
     return (
         <>
             {Object.entries(schedules).map(([routeId, stops]) => {
