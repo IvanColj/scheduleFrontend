@@ -1,18 +1,21 @@
 import styles from "./Table.module.scss";
 import { useQuery } from "@tanstack/react-query";
 import { getSchedules } from "../Fetch/Transport.tsx";
+import {SetStateAction, useState} from "react";
 
 type Stop = {
     stop: string;
     time: string;
+    weekdayOrWeekend: boolean;
 };
 
 type IncomingData = {
     [routeId: string]: Stop[];
 };
 
-function Table({ transport }: { transport: string }) {
-    const { data, error, isLoading } = useQuery({
+function Table({transport}: { transport: string }) {
+    const [searchTerm, setSearchTerm] = useState('');
+    const {data, error, isLoading} = useQuery({
         queryKey: ['allSchedule', transport],
         queryFn: () => getSchedules(transport)
     });
@@ -28,15 +31,46 @@ function Table({ transport }: { transport: string }) {
         return <div className={styles.text}>Расписания для данного транспорта пока отсутствуют</div>;
     }
 
+    const handleSearch = (event: { target: { value: SetStateAction<string>; }; }) => {
+        setSearchTerm(event.target.value);
+    };
+
+    function normalizeString(str: string) {
+        return str
+            .toLowerCase()
+            .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '') // удаляем знаки препинания
+            .trim();
+    }
+
+    const filteredSchedules = Object.entries(schedules)
+        .filter(([, stops]) => {
+            const normalizedSearch = normalizeString(searchTerm);
+            // Проверяем, есть ли в маршруте хотя бы одна подходящая остановка
+            return stops.some(stop =>
+                normalizeString(stop.stop).includes(normalizedSearch)
+            );
+        });
+
+
     return (
         <>
-            {Object.entries(schedules).map(([routeId, stops]) => {
+            <div className={styles.input}>
+                <input
+                    type="text"
+                    className={styles.in}
+                    value={searchTerm}
+                    onChange={handleSearch}
+                />
+                <div className={styles.labelLine}>Поиск остановки</div>
+            </div>
+            {filteredSchedules.map(([routeId, stops]) => {
                 const stopNames = stops.map(stop => stop.stop);
                 const times = stops.map(stop => stop.time);
-
+                const weekday = stops[0].weekdayOrWeekend ;
                 return (
                     <div className={styles.container} key={routeId}>
                         <div className={styles.content}>
+                            {weekday ? (<a  className={styles.text}>Выходной</a>) : (<a  className={styles.text}>Будни</a>)}
                             <table className={styles.table}>
                                 <thead className={styles.thead}>
                                 <tr className={styles.tr}>
