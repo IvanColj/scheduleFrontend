@@ -2,12 +2,14 @@ import styles from './App.module.scss';
 import React, {useState, useRef, useEffect} from 'react';
 import AdminMain from "../AdminMain/AdminMain.tsx";
 
-type TypeAdmin = {
+type AppProps = {
     isAdmin: boolean;
     setIsAdmin: (value: boolean) => void;
+    showTable: string;
+    setShowTable: (value: string) => void;
 };
 
-function App({isAdmin, setIsAdmin}:TypeAdmin) {
+function App({isAdmin, setIsAdmin, showTable, setShowTable}: AppProps) {
 
     const [auth, setAuth] = useState({
         login: '',
@@ -96,7 +98,7 @@ function App({isAdmin, setIsAdmin}:TypeAdmin) {
     return (
         <>
             {
-                isAdmin ? (<AdminMain/>) :
+                isAdmin ? (<AdminMain showTable={showTable} setShowTable={setShowTable}></AdminMain>) :
                     (
                         <div className={styles.container}>
                             <div className={styles.card}>

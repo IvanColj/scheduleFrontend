@@ -1,4 +1,4 @@
-import styles from "./Table.module.scss";
+import styles from "./TableUser.module.scss";
 import { useQuery } from "@tanstack/react-query";
 import { getSchedules } from "../Fetch/Transport.tsx";
 import {SetStateAction, useState} from "react";
@@ -6,14 +6,14 @@ import {SetStateAction, useState} from "react";
 type Stop = {
     stop: string;
     time: string;
-    weekdayOrWeekend: boolean;
+    weekday: boolean;
 };
 
 type IncomingData = {
     [routeId: string]: Stop[];
 };
 
-function Table({transport}: { transport: string }) {
+function TableUser({transport}: { transport: string }) {
     const [searchTerm, setSearchTerm] = useState('');
     const {data, error, isLoading} = useQuery({
         queryKey: ['allSchedule', transport],
@@ -66,11 +66,12 @@ function Table({transport}: { transport: string }) {
             {filteredSchedules.map(([routeId, stops]) => {
                 const stopNames = stops.map(stop => stop.stop);
                 const times = stops.map(stop => stop.time);
-                const weekday = stops[0].weekdayOrWeekend ;
+                const weekday = stops[0].weekday;
+                console.log(stops[0].weekday);
                 return (
                     <div className={styles.container} key={routeId}>
                         <div className={styles.content}>
-                            {weekday ? (<a  className={styles.text}>Выходной</a>) : (<a  className={styles.text}>Будни</a>)}
+                            {weekday ? (<a  className={styles.text}>Будни</a>) : (<a  className={styles.text}>Выходные</a>)}
                             <table className={styles.table}>
                                 <thead className={styles.thead}>
                                 <tr className={styles.tr}>
@@ -95,4 +96,4 @@ function Table({transport}: { transport: string }) {
     );
 }
 
-export default Table;
+export default TableUser;

@@ -1,8 +1,9 @@
 import styles from "./TypeTransport.module.scss";
-import Table from "../Schedule/Table.tsx";
+import TableUser from "../Schedule/TableUser.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {getBoardNumber, getTypes} from "../Fetch/Transport.tsx";
 import {useState, useEffect, useMemo} from "react";
+import TableAdmin from "../TableAdmin/TableAdmin.tsx";
 
 type Transport = {
     number: string;
@@ -16,18 +17,30 @@ type Transports = {
 }
 
 type TypeTransportProps = {
-    showTable: boolean;
-    setShowTable: (value: boolean) => void;
+    showTable: string;
+    setShowTable: (value: string) => void;
+    user: boolean;
+    showTableAdminTransport: boolean;
 };
 
-function TypeTransport({showTable, setShowTable}: TypeTransportProps) {
-    const [selectedBoardNumber, setSelectedBoardNumber] = useState('');
-    const [selectedType, setSelectedType] = useState('');
+function TypeTransport({showTable, setShowTable, user, showTableAdminTransport}: TypeTransportProps) {
+    console.log(showTableAdminTransport);
+    const [hookShowTableAdminTransport, setHookShowTableAdminTransport] = useState(showTableAdminTransport)
+    const [selectedBoardNumber, setSelectedBoardNumber] = useState('')
+    const [selectedType, setSelectedType] = useState('')
 
     const showTableClick = (boardNumber: string) => {
-        setSelectedBoardNumber(boardNumber);
-        setShowTable(true);
+        if (user) {
+            setShowTable('showTable');
+            setHookShowTableAdminTransport(false)
+        }
+        else {
+            setShowTable('showTableAdmin')
+            setHookShowTableAdminTransport(true)
+        }
+        setSelectedBoardNumber(boardNumber)
     }
+
 
     const {data: dataTypes, error: errorTypes, isLoading: loadingTypes} = useQuery({
         queryKey: ['allTypes'],
@@ -63,11 +76,13 @@ function TypeTransport({showTable, setShowTable}: TypeTransportProps) {
 
     return (
         <>
-            {showTable ? (
+            {showTable === 'showTable' && user && (
                 <>
-                    <Table transport={selectedBoardNumber}/>
+                    <TableUser transport={selectedBoardNumber}/>
                 </>
-            ) : (<>
+            )}
+            {(showTable === 'showTableAdmin' && !hookShowTableAdminTransport && !user || (showTable === 'notShowTable')) &&  (
+                <>
                     <div className={styles.content}>
                         {typesTransports.map((type, index) => (
                             <div key={index} className={`${styles.type} ${selectedType === type ? styles.selected : ""}`}
@@ -85,6 +100,9 @@ function TypeTransport({showTable, setShowTable}: TypeTransportProps) {
                         ))}
                     </div>
                 </>
+            )}
+            {showTable === 'showTableAdmin' && hookShowTableAdminTransport && !user && (
+                <TableAdmin transport={selectedBoardNumber}/>
             )}
         </>
     );

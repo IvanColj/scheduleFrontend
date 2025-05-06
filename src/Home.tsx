@@ -8,15 +8,15 @@ import icon from "./components/images/Иконка.png";
 function Home() {
     const [isAuth, setIsAuth] = useState(false)
     const [isAdmin, setIsAdmin] = useState(false)
-    const [showTable, setShowTable] = useState(false);
+    const [showTable, setShowTable] = useState('notShowTable');
     const handleClick = () => {
-        setShowTable(false)
+        setShowTable('notShowTable')
         setIsAuth(false)
     }
 
     return (
         <>
-            {isAuth ? <App isAdmin={isAdmin} setIsAdmin={setIsAdmin}/> : <TypeTransport showTable={showTable} setShowTable={setShowTable} />}
+            {isAuth ? <App isAdmin={isAdmin} setIsAdmin={setIsAdmin} showTable={showTable} setShowTable={setShowTable} /> : <TypeTransport showTable={showTable} setShowTable={setShowTable} user={true} showTableAdminTransport={false}/>}
             <Auth isAuth={isAuth} setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />
             <img className={styles.textLeft} src={icon} alt={'Иконка'} onClick={handleClick}/>
         </>

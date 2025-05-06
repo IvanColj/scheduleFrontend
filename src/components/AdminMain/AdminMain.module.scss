@@ -1,0 +1,50 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+
+$primary-color: #324855;
+$secondary-color: #5c8c8c;
+$tertiary-color: #90c0cc;
+
+.textBlock {
+  padding-left: 40px;
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: left;
+}
+
+.login {
+  padding-left: 40px;
+  padding-top: 80px;
+}
+
+.text {
+  color: $primary-color;
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+}
+
+.rectangle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 220px;
+  height: 100vh;
+  background-color: $tertiary-color;
+}
+
+.main {
+  height: 100vh;
+}
+
+.transport {
+  padding-top: 20vh;
+  padding-left: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

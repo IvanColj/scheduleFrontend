@@ -1,0 +1,79 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+
+$primary-color: #324855;
+$secondary-color: #5c8c8c;
+$tertiary-color: #90c0cc;
+
+.container {
+  display: flex;
+  gap: 10vh;
+}
+
+a {
+  color: $primary-color;
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+}
+
+.firstColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 3vh;
+}
+
+.secondColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttons {
+  display: flex;
+}
+
+.textWrapper {
+  background-color: $tertiary-color;
+  border-radius: 18px;
+  padding: 12px 16px;
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.popup {
+  background-color: $secondary-color ;
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.in {
+  outline: none;
+  font-size: 1.7em;
+  padding: 0 20px;
+  line-height: 40px;
+  border-radius: 60px;
+  border: 4px solid $primary-color;
+  background-color: transparent;
+  transition: 0.1s ease;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  margin-bottom: 20px;
+}

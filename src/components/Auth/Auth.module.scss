@@ -22,6 +22,15 @@ $tertiary-color: #90c0cc;
   font-size: 1.6em;
   font-weight: 600;
   color: $primary-color;
-  background-color: $secondary-color;
   transition: 0.2s ease;
+}
+
+.rectangle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 250px;
+  height: 100vh;
+  background-color: $tertiary-color;
 }
