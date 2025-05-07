@@ -24,7 +24,6 @@ type TypeTransportProps = {
 };
 
 function TypeTransport({showTable, setShowTable, user, showTableAdminTransport}: TypeTransportProps) {
-    console.log(showTableAdminTransport);
     const [hookShowTableAdminTransport, setHookShowTableAdminTransport] = useState(showTableAdminTransport)
     const [selectedBoardNumber, setSelectedBoardNumber] = useState('')
     const [selectedType, setSelectedType] = useState('')
