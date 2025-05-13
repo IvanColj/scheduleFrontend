@@ -1,6 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import {getSchedulesTime} from "../Fetch/Transport.tsx";
-import {getStopStartEnd, saveStop} from "../Fetch/Stop.tsx";
+import {getStopStartEnd, saveStop, stopDelete} from "../Fetch/Stop.tsx";
 import {useState} from "react";
 import stylesPageUpdate from "./PageUpdate.module.scss";
 import stylesTransport from "../TypeTransport/TypeTransport.module.scss"
@@ -12,7 +12,7 @@ type PageUpdateProps = {
 }
 
 type Stops = {
-    route: number;
+    number: number;
     stopStart: string;
     stopEnd: string;
     startTime: string;
@@ -22,6 +22,7 @@ type Stops = {
 }
 
 type StopsAdd = {
+    number: number;
     stage: number;
     stopStart: string;
     stopEnd: string;
@@ -41,7 +42,8 @@ function PageUpdate({time, transport}: PageUpdateProps) {
     const [selected, setSelected] = useState("Остановки")
     const [count, setCount] = useState(0)
     const [insert, setInsert] = useState(false)
-    const [stopData, setStopData] = useState<StopData>();
+    const [deleteStop, setDeleteStop] = useState(false)
+    const [stopData, setStopData] = useState<StopData>()
 
     const {data: dataStops, isLoading: isLoadingStops, error: errorStops} = useQuery({
         queryKey: ['', transport],
@@ -53,13 +55,20 @@ function PageUpdate({time, transport}: PageUpdateProps) {
         queryFn: () => getStopStartEnd(stops[stops.length - 1].stopEnd),
     })
 
-    const {isLoading} = useQuery({
+    const {isLoading: isLoadingDeleteData} = useQuery({
+        queryKey: ['stopDelete'],
+        queryFn: () => stopDelete(stopData!),
+        enabled: Boolean(deleteStop),
+    });
+
+    const {isLoading: isLoadingStopData} = useQuery({
         queryKey: ['stopData', stopData],
         queryFn: () => saveStop(stopData!),
         enabled: Boolean(stopData),
         });
 
-    if (isLoading) return <div>Загрузка...</div>
+    if (isLoadingDeleteData) return <div>Загрузка...</div>
+    if (isLoadingStopData) return <div>Загрузка...</div>
 
     if (isLoadingStops) return <div>Загрузка...</div>
     if (errorStops) return <div>Ошибка загрузки данных</div>
@@ -77,60 +86,69 @@ function PageUpdate({time, transport}: PageUpdateProps) {
         : [];
     const options = stopsAdd.map(stop => stop.stopEnd);
 
-    const isFirst = count === 0;
-    const isLast = count === stops.length - 1;
+    const isFirst = count === 0
+    const isLast = count === stops.length - 1
 
-    const toggleOpen = () => setOpen(!open);
+    const toggleOpen = () => setOpen(!open)
 
     const onSelect = (option: string) => {
-        setSelected(option);
-        setOpen(false);
+        setSelected(option)
+        setOpen(false)
     };
 
     const handleNext = () => {
-        if (!isLast) setCount(count + 1);
+        if (!isLast) setCount(count + 1)
+        setDeleteStop(false)
     };
 
     const handlePrev = () => {
-        if (!isFirst) setCount(count - 1);
+        if (!isFirst) setCount(count - 1)
     };
 
     const saveStopClick = () => {
-        console.log(stopsAdd[0]);
-        console.log(stops[0]);
         setStopData({
             orderNum: stops.length + 1,
             number: stopsAdd[0].number,
             route: stops[0].number
         });
+        setInsert(false)
     };
 
-    const dropdowns = document.getElementsByClassName("dropdown");
+    const deleteStopClick = () => {
+        setStopData({
+            orderNum: stops.length,
+            number: stopsAdd[0].stage - 1,
+            route: stops[0].number
+        });
+        setDeleteStop(true)
+    };
+
+    const dropdowns = document.getElementsByClassName("dropdown")
 
     Array.from(dropdowns).forEach(dropdown => {
-        const select = dropdown.querySelector<HTMLElement>(".select");
-        const caret = dropdown.querySelector<HTMLElement>(".caret");
-        const menu = dropdown.querySelector<HTMLElement>(".menu");
-        const options = menu?.querySelectorAll<HTMLLIElement>("li");
-        const selected = select?.querySelector<HTMLElement>(".selected");
+        const select = dropdown.querySelector<HTMLElement>(".select")
+        const caret = dropdown.querySelector<HTMLElement>(".caret")
+        const menu = dropdown.querySelector<HTMLElement>(".menu")
+        const options = menu?.querySelectorAll<HTMLLIElement>("li")
+        const selected = select?.querySelector<HTMLElement>(".selected")
 
-        if (!select || !caret || !menu || !options || !selected) return;
+        if (!select || !caret || !menu || !options || !selected) return
 
         select.addEventListener("click", () => {
-            select.classList.toggle("select-clicked");
-            caret.classList.toggle("caret-rotate");
-            menu.classList.toggle("menu-open");
+            select.classList.toggle("select-clicked")
+            caret.classList.toggle("caret-rotate")
+            menu.classList.toggle("menu-open")
         });
 
         options.forEach(option => {
             option.addEventListener("click", () => {
-                selected.innerText = option.innerText;
-                select.classList.remove("select-clicked");
-                caret.classList.remove("caret-rotate");
-                menu.classList.remove("menu-open");
+                selected.innerText = option.innerText
+                select.classList.remove("select-clicked")
+                caret.classList.remove("caret-rotate")
+                menu.classList.remove("menu-open")
 
-                options.forEach(opt => opt.classList.remove("active"));
-                option.classList.add("active");
+                options.forEach(opt => opt.classList.remove("active"))
+                option.classList.add("active")
             });
         });
     });
@@ -156,13 +174,22 @@ function PageUpdate({time, transport}: PageUpdateProps) {
                     </div>
                     <div>
                         <div className={stylesPageUpdate.buttons}>
-                            <button className={stylesTransport.type} onClick={handlePrev} disabled={isFirst}>
-                                Назад
-                            </button>
-                            <button className={stylesTransport.type} onClick={handleNext} disabled={isLast}>
-                                Вперёд
-                            </button>
+                            {isFirst ? (
+                                <></>
+                            ) : (
+                                <div className={stylesTransport.type} onClick={handlePrev}>
+                                    Назад
+                                </div>
+                            )}
+                            {isLast ? (
+                                <></>
+                            ) : (
+                                <div className={stylesTransport.type} onClick={handleNext}>
+                                    Вперёд
+                                </div>
+                            )}
                             {isLast && <div className={stylesTransport.type} onClick={() => setInsert(true)}>Добавить</div>}
+                            {isLast && <div className={stylesTransport.type} onClick={deleteStopClick}>Удалить</div>}
                             <Dialog open={insert} onClose={() => setInsert(false)}>
                                 <div className={stylesPageUpdate.bg}>
                                     <Dialog.Panel className={stylesPageUpdate.popup}>

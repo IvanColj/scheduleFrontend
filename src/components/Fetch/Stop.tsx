@@ -25,3 +25,15 @@ export const saveStop = async (stopData: StopData) => {
     return response.json();
 };
 
+export const stopDelete = async (stopData: StopData) => {
+    const response = await fetch(`http://localhost:8080/api/stages/delete`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(stopData)
+    });
+    return response.json();
+};
+
+
