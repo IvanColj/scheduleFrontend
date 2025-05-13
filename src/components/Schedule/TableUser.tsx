@@ -38,14 +38,13 @@ function TableUser({transport}: { transport: string }) {
     function normalizeString(str: string) {
         return str
             .toLowerCase()
-            .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '') // удаляем знаки препинания
+            .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
             .trim();
     }
 
     const filteredSchedules = Object.entries(schedules)
         .filter(([, stops]) => {
             const normalizedSearch = normalizeString(searchTerm);
-            // Проверяем, есть ли в маршруте хотя бы одна подходящая остановка
             return stops.some(stop =>
                 normalizeString(stop.stop).includes(normalizedSearch)
             );
@@ -67,7 +66,6 @@ function TableUser({transport}: { transport: string }) {
                 const stopNames = stops.map(stop => stop.stop);
                 const times = stops.map(stop => stop.time);
                 const weekday = stops[0].weekday;
-                console.log(stops[0].weekday);
                 return (
                     <div className={styles.container} key={routeId}>
                         <div className={styles.content}>

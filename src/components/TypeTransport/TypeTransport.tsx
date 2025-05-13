@@ -52,18 +52,16 @@ function TypeTransport({showTable, setShowTable, user, showTableAdminTransport}:
             : [];
     }, [dataTypes]);
 
-    // Установка selectedType после получения данных
     useEffect(() => {
         if (typesTransports.length > 0) {
-            setSelectedType(typesTransports[0]); // Устанавливаем первый тип по умолчанию
+            setSelectedType(typesTransports[0]);
         }
     }, [typesTransports]);
 
-    // Получение данных о транспорте на основе выбранного типа
     const {data: dataTransports, error: errorTransports, isLoading: loadingTransports} = useQuery({
         queryKey: ['allTransport', selectedType],
         queryFn: () => getBoardNumber(selectedType),
-        enabled: !!selectedType // Запрос выполняется только если selectedType не пустой
+        enabled: !!selectedType
     });
 
     if (loadingTransports || loadingTypes) return <div>Загрузка...</div>;

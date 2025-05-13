@@ -1,8 +1,3 @@
-export const getAll = async () => {
-    const response = await fetch('http://localhost:8080/api/staff/all')
-    return response.json();
-}
-
 const toBase64 = (str: string) => {
     return window.btoa(str);
 };
